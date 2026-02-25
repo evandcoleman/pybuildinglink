@@ -40,18 +40,27 @@ class BuildingLinkClient:
 
     def __init__(
         self,
-        refresh_token: str,
+        *,
+        username: str | None = None,
+        password: str | None = None,
+        refresh_token: str | None = None,
         device_id: str | None = None,
         session: aiohttp.ClientSession | None = None,
     ) -> None:
         """Initialize the client.
 
         Args:
-            refresh_token: OAuth2 refresh token.
+            username: BuildingLink username (email). Preferred auth method.
+            password: BuildingLink password.
+            refresh_token: OAuth2 refresh token (legacy fallback).
             device_id: Device UUID. Generated if not provided.
             session: Optional aiohttp session. Created internally if not provided.
         """
-        self._auth = BuildingLinkAuth(refresh_token)
+        self._auth = BuildingLinkAuth(
+            username=username,
+            password=password,
+            refresh_token=refresh_token,
+        )
         self._device_id = device_id or str(uuid.uuid4())
         self._session = session
         self._owns_session = session is None

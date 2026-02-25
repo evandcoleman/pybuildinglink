@@ -1,6 +1,8 @@
 """Constants for the BuildingLink API client."""
 
 AUTH_URL = "https://auth.buildinglink.com/connect/token"
+LOGIN_URL = "https://www.buildinglink.com/v2/global/login/login.aspx"
+OIDC_CALLBACK_URL = "https://www.buildinglink.com/v2/oidc-callback"
 API_HOST = "https://api.buildinglink.com"
 EVENTLOG_HOST = "https://eventlog-us1.buildinglink.com"
 MAINTENANCE_HOST = "https://maintenance-us1.buildinglink.com"
