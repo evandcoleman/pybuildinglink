@@ -17,7 +17,11 @@ import asyncio
 from pybuildinglink import BuildingLinkClient
 
 async def main():
-    async with BuildingLinkClient(refresh_token="your-refresh-token") as client:
+    # Preferred: username/password auth
+    async with BuildingLinkClient(
+        username="you@example.com",
+        password="your-password",
+    ) as client:
         # Get open packages
         packages = await client.async_get_packages()
         for pkg in packages:
@@ -48,11 +52,24 @@ async def main():
 asyncio.run(main())
 ```
 
+### Legacy: Refresh Token Auth
+
+If you already have a refresh token, you can still use it:
+
+```python
+async with BuildingLinkClient(refresh_token="your-refresh-token") as client:
+    packages = await client.async_get_packages()
+```
+
 ## Authentication
 
-BuildingLink uses OAuth2 with refresh tokens. You need a valid refresh token from the BuildingLink iOS app. The client automatically refreshes the access token (15 min expiry) as needed.
+The client supports two authentication methods:
 
-The refresh token is rotated on each use — the client tracks the latest one via `client.refresh_token`.
+1. **Username/Password (preferred)** — Uses the same web login flow as the BuildingLink website. No manual token capture needed. The client automatically handles the OIDC login flow and token refresh.
+
+2. **Refresh Token (legacy)** — Uses OAuth2 refresh tokens from the BuildingLink iOS app. Requires intercepting app traffic with a proxy tool like Proxyman. The refresh token is rotated on each use.
+
+Access tokens expire after 15 minutes. The client automatically re-authenticates when needed.
 
 ## API Coverage
 
